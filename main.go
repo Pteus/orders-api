@@ -2,15 +2,21 @@ package main
 
 import (
 	"fmt"
+	"github-com/pteus/orders-api/middleware"
 	"net/http"
 )
 
 func main() {
 	router := http.NewServeMux()
 
-	router.HandleFunc("/", basicHandler)
+	router.HandleFunc("GET /hello", basicHandler)
 
-	err := http.ListenAndServe(":3000", router)
+	server := http.Server{
+		Addr:    ":3000",
+		Handler: middleware.Logging(router),
+	}
+
+	err := server.ListenAndServe()
 	if err != nil {
 		fmt.Println("failed to start server", err)
 	}

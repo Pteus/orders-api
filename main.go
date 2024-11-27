@@ -1,27 +1,17 @@
 package main
 
 import (
+	"context"
 	"fmt"
-	"github-com/pteus/orders-api/middleware"
-	"net/http"
+	"github-com/pteus/orders-api/application"
 )
 
 func main() {
-	router := http.NewServeMux()
+	app := application.NewApp()
 
-	router.HandleFunc("GET /hello", basicHandler)
-
-	server := http.Server{
-		Addr:    ":3000",
-		Handler: middleware.Logging(router),
-	}
-
-	err := server.ListenAndServe()
+	err := app.Start(context.TODO())
 	if err != nil {
-		fmt.Println("failed to start server", err)
+		fmt.Println("failed to start app:", err)
 	}
-}
 
-func basicHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Hello World"))
 }

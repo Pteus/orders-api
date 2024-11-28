@@ -1,13 +1,19 @@
 package application
 
-import "net/http"
+import (
+	"github-com/pteus/orders-api/handler"
+	"net/http"
+)
 
 func loadRoutes() *http.ServeMux {
 	router := http.NewServeMux()
+	orderHandler := &handler.Order{}
 
-	router.HandleFunc("GET /hello", func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusOK)
-	})
+	router.HandleFunc("GET /order", orderHandler.List)
+	router.HandleFunc("POST /order", orderHandler.Create)
+	router.HandleFunc("GET /order/{id}", orderHandler.GetByID)
+	router.HandleFunc("PUT /order/{id}", orderHandler.UpdateByID)
+	router.HandleFunc("DELETE /order/{id}", orderHandler.DeleteByID)
 
 	return router
 }
